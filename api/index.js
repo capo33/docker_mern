@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/', noteRoute)
+app.use('/api/v1', noteRoute)
 
 // Start server
 const PORT = process.env.PORT || 4000;
