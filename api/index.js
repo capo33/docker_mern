@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const connect = require('./config/db');
+const noteRoute = require('./routes/Note.routes');
 
 // Initialize express
 const app = express();
@@ -14,9 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.get('/', async (req, res) => {
-  res.send('Hello World');
-});
+app.use('/', noteRoute)
 
 // Start server
 const PORT = process.env.PORT || 4000;
