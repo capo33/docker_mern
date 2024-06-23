@@ -1,0 +1,35 @@
+version: '3.8'
+volumes:
+  mongo-data: # this is the name of the volume and can be anything
+services:
+  mongo: # pull from docker hub and we can call it anything
+    image: mongo # this mongo is refering to the image name in docker hub
+    container_name: mongo_container # this is the name of the container and can be anything
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-data:/data/db # ./data name of volume can be anything & /data/db is the default path of the volume in the container
+  api:
+    build: ./api
+    container_name: api_container # this is the name of the container and can be anything
+    ports:
+      - "4000:4000" 
+    depends_on:  # this mean the docker file of api will not execute and wait until the mongo container is up and running
+      - mongo # this is the name of the service 
+    volumes:
+      - ./api:/app # current directory path:/ the path of the container
+      - /app/node_modules
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/docker-mern  # this is the environment variable that the api service will use
+  client:
+    build: ./client
+    container_name: client_container
+    ports:
+     - "8080:8080"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - api
+    volumes:
+      - ./client:/app
+      - /app/node_modules
